@@ -17,6 +17,22 @@ def calculate_grades():
 def search_student():
     pass
 
+# Function to classify grades
+# Parameter: grade (int)
+# Returns: classification (str)
+# Description: This function classifies grades into A, B, C, D, or F
+def grade_classification(grade:int) -> str:
+    if grade >= 90:
+        return "A"
+    elif grade >= 80:
+        return "B"
+    elif grade >= 70:
+        return "C"
+    elif grade >= 60:
+        return "D"
+    else:
+        return "F"
+
 # Login
 while login:
     username = input("Enter your username: ")
@@ -29,17 +45,27 @@ while login:
 
 # Define a query loop
 while True:
+    qs_int = {
+        "1": "Adding students",
+        "2": "Calculating grades",
+        "3": "Searching by ID or name"
+    }
+    qs_str = {
+        "add": qs_int["1"],
+        "calc": qs_int["2"],
+        "search": qs_int["3"]
+    }
     query = input("Choose Your Query Options (1,2,3 or add, calc or search) or type 'exit' to quit): \n"
-    "[1] Adding students (add) \n[2] Calculating grades (calc)\n[3]Searching by ID or namen (search)\n")
+    f"[1] {qs_int['1']} (add) \n[2] {qs_int['2']} (calc)\n[3] {qs_int['3']} (search)\n")
     if query.lower() == "exit":
         print("Exiting the program. Goodbye!")
         break
-    elif query not in ["1", "2", "3", "add", "calc", "search"]:
+    elif query.lower() not in ["1", "2", "3", "add", "calc", "search"]:
         print("Invalid option. Please choose a valid query option or type 'exit' to quit.")
         continue
     else:
-        # Simulate processing the query
-        print(f"Processing your query: {query}")
+        # Processing the query
+        print(f"You selected: {qs_int.get(query, qs_str.get(query.lower()))}")
         
         if query == "1" or query.lower() == "add":
             add_student()
