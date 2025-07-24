@@ -104,7 +104,22 @@ while login:
         login = False
     else:
         print("Invalid username or password. Please try again.")
-
+# Load records on start
+import ast
+def load_records(filename):
+    students = []
+    with open(filename, "r") as file:
+        header = file.readline().strip()
+        for line in file:
+            parts = line.strip().split(", ", 2)
+            student = {"id": parts[0], "name": parts[1], "grade": ast.literal_eval(parts[2])}
+            students.append(student)
+    return students
+print("Loading student records...")
+result_load_records = load_records(fp)
+print(result_load_records)
+print("-" * 50)
+print("Welcome to the Student Management System!")
 # Define a query loop
 while True:
     qs_int = {
