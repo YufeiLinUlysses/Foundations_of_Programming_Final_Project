@@ -1,5 +1,6 @@
 import getpass
 from time import sleep
+import ast
 
 # Define global variables
 fp = "students.txt"
@@ -10,11 +11,10 @@ cred = {
     "pwd": "password123"
 }
 
-## Add student to the record if the student is not in the record
-## If successfully added, then print student added
-## If already exists, then print student already exists
-
-def add_student(student_id, name, grades, path="students.txt"):
+# Add student to the record if the student is not in the record
+# If successfully added, then print student added
+# If already exists, then print student already exists
+def add_student(student_id, name, grades, path=fp):
     # Read existing IDs
     existing_ids = set()
     with open(path, "r") as file:
@@ -32,7 +32,9 @@ def add_student(student_id, name, grades, path="students.txt"):
     else:
         print(f"Student {student_id} already exists.")
 
-def calculate_grades(path="students.txt"):
+# Calculate average score for each student
+# Print student record with id, name and average score
+def calculate_grades(path=fp):
     with open(path, "r") as file:
         next(file)  # Skip header
         for line in file:
@@ -41,14 +43,16 @@ def calculate_grades(path="students.txt"):
             name = parts[1]
             grades_str = parts[2].strip("[]")  # Remove square brackets
             grades = [int(g) for g in grades_str.split(",")]  # Split by comma, convert to int
-            avg_score = sum(grades) / len(grades)
+            if len(grades) == 0:
+                avg_score = 0
+            else:
+                avg_score = sum(grades) / len(grades)
             print(f"{student_id}, {name}, Average Score: {avg_score:}")
 
-##Search student using student_id 
-##If found, then print student record with id, name and grade
-## If not found, then print student not found
-    
-def search_student(student_id, path="students.txt"):
+# Search student using student_id 
+# If found, then print student record with id, name and grade
+# If not found, then print student not found
+def search_student(student_id, path=fp):
     with open(path, "r") as file:
         header = file.readline().strip()
         for line in file:
@@ -58,6 +62,19 @@ def search_student(student_id, path="students.txt"):
                 print(line.strip())
                 return
     print(f"Student with ID {student_id} not found.")
+
+# Load student records from file
+# Returns a list of dictionaries with student records
+# Each dictionary contains id, name, and grade
+def load_records(filename):
+    students = []
+    with open(filename, "r") as file:
+        header = file.readline().strip()
+        for line in file:
+            parts = line.strip().split(", ", 2)
+            student = {"id": parts[0], "name": parts[1], "grade": ast.literal_eval(parts[2])}
+            students.append(student)
+    return students
 
 # Function to classify grades
 # Parameter: grade (int)
@@ -105,16 +122,7 @@ while login:
     else:
         print("Invalid username or password. Please try again.")
 # Load records on start
-import ast
-def load_records(filename):
-    students = []
-    with open(filename, "r") as file:
-        header = file.readline().strip()
-        for line in file:
-            parts = line.strip().split(", ", 2)
-            student = {"id": parts[0], "name": parts[1], "grade": ast.literal_eval(parts[2])}
-            students.append(student)
-    return students
+
 print("Loading student records...")
 result_load_records = load_records(fp)
 print(result_load_records)
